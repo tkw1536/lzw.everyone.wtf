@@ -1,0 +1,5 @@
+textarea.InputBox, textarea.OutputBox {
+    display: block;
+    width: 100%;
+    min-height: 33vh;
+}
