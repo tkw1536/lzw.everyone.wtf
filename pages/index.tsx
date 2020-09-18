@@ -3,7 +3,7 @@ import Head from 'next/head';
 import style from './index.module.css';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { lzw_encode, lzw_decode, lzw_compile } from "../utils/compress";
+import { lzw_encode, lzw_decode, lzw_compile, lzw_compile_ts } from "../utils/compress";
 
 interface IPageState {
     inputValue: string,
@@ -61,10 +61,25 @@ Compressed size ${inputValue.length} to size ${outputValue.length} (${ratio}%)`;
     private readonly onClickCompile = () => {
         try {
             const inputValue = this.state.inputValue;
+            const inLength = JSON.stringify(inputValue).length;
             const outputValue = lzw_compile(inputValue);
 
+            const ratio = (outputValue.length / inLength) * 100;
+            const message = `Compiled JS ${inLength} => ${outputValue.length} (${ratio}%)`;
+
+            this.setState({ outputValue, message })
+        } catch(e) {
+            this.setState({ outputValue: "", message: "Failed to compile, is the input utf-8 and not utf-16? " + e })
+        }
+    }
+    private readonly onClickCompileTS = () => {
+        try {
+            const inputValue = this.state.inputValue;
+            const inLength = JSON.stringify(inputValue).length;
+            const outputValue = lzw_compile_ts(inputValue);
+
             const ratio = (outputValue.length / JSON.stringify(inputValue).length) * 100;
-            const message = `Compiled ${inputValue.length} => ${outputValue.length} (${ratio}%)`;
+            const message = `Compiled TS ${inLength} => ${outputValue.length} (${ratio}%)`;
 
             this.setState({ outputValue, message })
         } catch(e) {
@@ -74,14 +89,14 @@ Compressed size ${inputValue.length} to size ${outputValue.length} (${ratio}%)`;
     private readonly onClickEval = () => {
         try {
             const inputValue = this.state.inputValue;
+            const inLength = JSON.stringify(inputValue).length;
             const outputValue = lzw_compile(inputValue);
 
-            const ratio = (outputValue.length / JSON.stringify(inputValue).length) * 100;
-            const message = `Compiled ${inputValue.length} => ${outputValue.length} (${ratio}%)`;
+            const ratio = (outputValue.length / inLength) * 100;
 
             const ok = eval("(" +outputValue + ")") == inputValue;
             const text = `${ok?"Success":"Failure"}
-Compiled size ${inputValue.length} to size ${outputValue.length} (${ratio}%)`;
+Compiled size ${inLength} to size ${outputValue.length} (${ratio}%)`;
 
             this.setState({ outputValue: text, message: "" });
         } catch(e) {
@@ -109,6 +124,8 @@ Compiled size ${inputValue.length} to size ${outputValue.length} (${ratio}%)`;
                 &nbsp;
                 <button onClick={this.onClickCompile}>Compile</button>
                 &nbsp;
+                <button onClick={this.onClickCompileTS}>Compile TS</button>
+                &nbsp;
                 <button onClick={this.onClickEval}>Eval</button>
                 &nbsp;
                 &nbsp;
@@ -130,7 +147,8 @@ Compiled size ${inputValue.length} to size ${outputValue.length} (${ratio}%)`;
                     <li><b>Compress</b> text using lzw</li>
                     <li><b>Decompress</b> text using lzw</li>
                     <li><b>Check</b> that compression and decompression returns the original string</li>
-                    <li><b>Compile</b> string for inclusion in JavaScript Code</li>
+                    <li><b>Compile</b> a string for inclusion in JavaScript Code</li>
+                    <li><b>Compile</b> string for inclusion in TypeScript Code</li>
                     <li><b>Eval</b> that the compiled version returns the original JavaScript code</li>
                 </ul>
             </p>

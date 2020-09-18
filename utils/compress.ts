@@ -65,3 +65,8 @@ export function lzw_compile(s: string): string {
     return `function(o){for(var r,t,e=o[0],n={},u=[e],h=e,a=256,c=1;c<o.length;c++)r=(t=o.charCodeAt(c))<256?o[c]:n[t]?n[t]:h+e,u.push(r),e=r.charAt(0),n[a]=h+e,a++,h=r;return decodeURIComponent(escape(u.join("")))}(${JSON.stringify(lzw_encode(s))})`;
 }
 
+export function lzw_compile_ts(s: string): string {
+    // in typescript we need an index signature. We could use Record<number,string>, but {[v:number]:string} is shorter by 2 chars
+    return `function(o){for(var r,t,e=o[0],n:{[v:number]:string}={},u=[e],h=e,a=256,c=1;c<o.length;c++)r=(t=o.charCodeAt(c))<256?o[c]:n[t]?n[t]:h+e,u.push(r),e=r.charAt(0),n[a]=h+e,a++,h=r;return decodeURIComponent(escape(u.join("")))}(${JSON.stringify(lzw_encode(s))})`;
+}
+
