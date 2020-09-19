@@ -106,13 +106,14 @@ Compiled size ${inLength} to size ${outputValue.length} (${ratio}%)`;
 
     render() {
         const { inputValue, outputValue, message } = this.state;
-        return <>
+        return <div className={style.UI}>
             <Head><title>JS LZW Compression</title></Head>
             <p>
                 This page compresses UTF-8 Strings using LZW for inclusion in JavaScript Source Code. 
+                <small>You probably want to use a gzipped transport instead. </small>
             </p>
             <p>
-                <textarea className={style.InputBox} value={inputValue} onChange={this.onChange}></textarea>
+                <textarea value={inputValue} onChange={this.onChange}></textarea>
             </p>
             <p>
                 <button onClick={this.onClickCompress}>Compress</button>
@@ -140,18 +141,16 @@ Compiled size ${inLength} to size ${outputValue.length} (${ratio}%)`;
                 {message}
             </p>
             <p>
-                <textarea className={style.OutputBox} readOnly value={outputValue}></textarea>
+                <textarea readOnly value={outputValue}></textarea>
             </p>
-            <p>
-                <ul>
-                    <li><b>Compress</b> text using lzw</li>
-                    <li><b>Decompress</b> text using lzw</li>
-                    <li><b>Check</b> that compression and decompression returns the original string</li>
-                    <li><b>Compile</b> a string for inclusion in JavaScript Code</li>
-                    <li><b>Compile</b> string for inclusion in TypeScript Code</li>
-                    <li><b>Eval</b> that the compiled version returns the original JavaScript code</li>
-                </ul>
-            </p>
-        </>;
+            <ul>
+                <li><b>Compress:</b> Compress text</li>
+                <li><b>Decompress:</b> Decompress text</li>
+                <li><b>Check</b>: Check that Compress &amp; Decompress returns the original text</li>
+                <li><b>Compile:</b> Compile text into JavaScript Code</li>
+                <li><b>Compile TS:</b> Compile text into TypeScript Code</li>
+                <li><b>Eval:</b> Check that executing compiled JavaScript code returns original text</li>
+            </ul>
+        </div>;
     }
 }
