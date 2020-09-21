@@ -11,7 +11,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-        <script async src="https://inform.everyone.wtf/legal.min.js?small" data-site-id="0f6951b0-8285-4a8f-8b09-92fc218ee208"></script>
+        <script async src="https://inform.everyone.wtf/legal.min.js?float" data-site-id="0f6951b0-8285-4a8f-8b09-92fc218ee208"></script>
         </Head>
         <body>
           <Main />
